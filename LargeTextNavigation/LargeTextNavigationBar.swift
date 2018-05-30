@@ -122,7 +122,7 @@ final public class LargeTextNavigationBar: UIView {
     // style
     floatingBarTitleLabel.textColor = .black
     floatingBarTitleLabel.text = "Setting"
-    floatingBarTitleLabel.font = UIFont.boldSystemFont(ofSize: fontSize)
+    floatingBarTitleLabel.font = UIFont(name: ".SFUIDisplay-Bold", size: fontSize)
     floatingBarTitleLabel.sizeToFit()
 
     // position
