@@ -10,16 +10,45 @@ import UIKit
 
 class ViewController: UIViewController {
 
+  var baseScrollView: UIScrollView!
+  var baseLabel: UILabel!
+
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
+
+    configure()
   }
 
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+  private func configure() {
+    baseScrollView = UIScrollView(frame: view.bounds)
+    view.addSubview(baseScrollView)
+
+    baseScrollView.contentSize.height = view.bounds.height * 4
+    baseScrollView.contentSize.width = view.bounds.width
+
+    baseScrollView.backgroundColor = .gray
+
+    baseScrollView.delegate = self
+    baseScrollView.contentInsetAdjustmentBehavior = .never
+
+    baseLabel = UILabel(frame: CGRect(x: 0,
+                                      y: 0,
+                                      width: view.bounds.width,
+                                      height: 17))
+    baseLabel.frame.origin.y = view.bounds.height
+    baseLabel.textColor = .black
+    baseLabel.text = "brew install librsvg"
+    baseScrollView.addSubview(baseLabel)
   }
 
 
 }
 
+extension ViewController : UIScrollViewDelegate {
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    print(scrollView.contentOffset)
+  }
+
+}
