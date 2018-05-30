@@ -28,6 +28,17 @@ final public class LargeTextNavigationBar: UIView {
     return staticBarView.bounds.height
   }
 
+  /// Extra nav bar height is used for large text extra height
+  ///
+  /// iPhone X:
+  ///  - standard height 88pt
+  ///  - large text height 140pt
+  ///
+  /// Other iPhone:
+  ///  - standard height 64pt
+  ///  - large text height 116pt
+  ///
+  /// (large - standard) is **52pt**
   private var extraNavBarHeight: CGFloat {
     return 52.0
   }
