@@ -13,6 +13,8 @@
 		6361443120BEB5D0004F44FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6361443020BEB5D0004F44FB /* Assets.xcassets */; };
 		6361443420BEB5D0004F44FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6361443220BEB5D0004F44FB /* LaunchScreen.storyboard */; };
 		6361443F20BEB5D1004F44FB /* LargeTextNavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361443E20BEB5D1004F44FB /* LargeTextNavigationTests.swift */; };
+		6361444A20BEB9E0004F44FB /* LargeTextNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361444920BEB9E0004F44FB /* LargeTextNavigationBar.swift */; };
+		6361444C20BEBA28004F44FB /* DetectDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361444B20BEBA28004F44FB /* DetectDevice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		6361443A20BEB5D1004F44FB /* LargeTextNavigationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LargeTextNavigationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6361443E20BEB5D1004F44FB /* LargeTextNavigationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextNavigationTests.swift; sourceTree = "<group>"; };
 		6361444020BEB5D1004F44FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6361444920BEB9E0004F44FB /* LargeTextNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextNavigationBar.swift; sourceTree = "<group>"; };
+		6361444B20BEBA28004F44FB /* DetectDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectDevice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,8 @@
 			children = (
 				6361442920BEB5CF004F44FB /* AppDelegate.swift */,
 				6361442B20BEB5CF004F44FB /* ViewController.swift */,
+				6361444920BEB9E0004F44FB /* LargeTextNavigationBar.swift */,
+				6361444B20BEBA28004F44FB /* DetectDevice.swift */,
 				6361442D20BEB5CF004F44FB /* Main.storyboard */,
 				6361443020BEB5D0004F44FB /* Assets.xcassets */,
 				6361443220BEB5D0004F44FB /* LaunchScreen.storyboard */,
@@ -197,7 +203,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6361444A20BEB9E0004F44FB /* LargeTextNavigationBar.swift in Sources */,
 				6361442C20BEB5CF004F44FB /* ViewController.swift in Sources */,
+				6361444C20BEBA28004F44FB /* DetectDevice.swift in Sources */,
 				6361442A20BEB5CF004F44FB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

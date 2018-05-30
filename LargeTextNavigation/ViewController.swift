@@ -13,6 +13,8 @@ class ViewController: UIViewController {
   var baseScrollView: UIScrollView!
   var baseLabel: UILabel!
 
+  var ya: LargeTextNavigationBar!
+
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
@@ -32,11 +34,16 @@ class ViewController: UIViewController {
     baseScrollView.delegate = self
     baseScrollView.contentInsetAdjustmentBehavior = .never
 
+    ya = LargeTextNavigationBar()
+    view.addSubview(ya)
+
+//    baseScrollView.contentInset.top = ya.currentHeight
+
     baseLabel = UILabel(frame: CGRect(x: 0,
                                       y: 0,
                                       width: view.bounds.width,
                                       height: 17))
-    baseLabel.frame.origin.y = view.bounds.height
+    baseLabel.frame.origin.y = ya.currentHeight
     baseLabel.textColor = .black
     baseLabel.text = "brew install librsvg"
     baseScrollView.addSubview(baseLabel)
@@ -49,6 +56,7 @@ extension ViewController : UIScrollViewDelegate {
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     print(scrollView.contentOffset)
+    ya.updateBar(with: scrollView.contentOffset)
   }
 
 }
