@@ -28,6 +28,14 @@ final public class LargeTextNavigationBar: UIView {
     return staticBarView.bounds.height
   }
 
+  private var extraNavBarHeight: CGFloat {
+    return 52.0
+  }
+
+  public var maxHeight: CGFloat {
+    return extraNavBarHeight + statusBarHeight + staticBarHeight
+  }
+
   // MARK: - Init
   public convenience init() {
     self.init(frame: CGRect.zero)
@@ -74,8 +82,8 @@ final public class LargeTextNavigationBar: UIView {
   /// adjust view's arrangement with content offset
   ///
   /// - Parameter offset: scroll view's content offset
-  public func updateBar(with offset: CGPoint) {
-    if offset.y > 0 { // scrolling up for more content
+  public func updateBar(with scrollView: UIScrollView) {
+    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + extraNavBarHeight) { // scrolling up for more content
       hideStaticTitleLabel()
     } else { // scrolling down and reach top, no more content
       showStaticTitleLabel()
