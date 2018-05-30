@@ -183,4 +183,18 @@ final public class LargeTextNavigationBar: UIView {
     }
   }
 
+  public func endDraggingWithoutDecelerate(_ scrollView: UIScrollView) {
+    let barY = -(scrollView.contentOffset.y + maxHeight)
+    if barY < -(extraNavBarHeight / 2) {
+      // push up, need to hide floating view
+      UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        scrollView.contentOffset.y = (self.extraNavBarHeight - scrollView.contentInset.top)
+      }, completion: nil)
+    } else {
+      UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        scrollView.contentOffset.y = -scrollView.contentInset.top
+      }, completion: nil)
+    }
+  }
+
 }

@@ -64,4 +64,15 @@ extension ViewController : UIScrollViewDelegate {
     ya.updateBar(with: scrollView)
   }
 
+  func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    if !decelerate {
+      // do something to hide/show bar
+      ya.endDraggingWithoutDecelerate(scrollView)
+    }
+  }
+
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
+  }
+
 }
