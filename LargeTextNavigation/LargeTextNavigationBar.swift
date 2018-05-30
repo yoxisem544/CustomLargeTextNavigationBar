@@ -24,6 +24,9 @@ final public class LargeTextNavigationBar: UIView {
   private var staticBarView: UIView!
   private var staticBarTitleLabel: UILabel!
 
+  private var floatingBarView: UIView!
+  private var floatingBarTitleLabel: UILabel!
+
   public var currentHeight: CGFloat {
     return staticBarView.bounds.height
   }
@@ -43,6 +46,7 @@ final public class LargeTextNavigationBar: UIView {
     return 52.0
   }
 
+  /// This Nav Bar's max height
   public var maxHeight: CGFloat {
     return extraNavBarHeight + statusBarHeight + staticBarHeight
   }
@@ -53,6 +57,9 @@ final public class LargeTextNavigationBar: UIView {
 
     configureStaticBarView()
     configureStaticBarTitleLabel()
+
+    configureFloatingBarView()
+    configureFloatingBarTitleLabel()
   }
 
   private func configureStaticBarView() {
@@ -80,6 +87,38 @@ final public class LargeTextNavigationBar: UIView {
 
     staticBarTitleLabel.center.y = statusBarHeight + staticBarHeight / 2
     staticBarView.addSubview(staticBarTitleLabel)
+  }
+
+  private func configureFloatingBarView() {
+    floatingBarView = UIView()
+    floatingBarView.frame.size.width = staticBarView.bounds.width
+    floatingBarView.frame.size.height = extraNavBarHeight
+
+    // style
+    floatingBarView.backgroundColor = .green
+//    floatingBarView.backgroundColor = .white
+
+    floatingBarView.frame.origin.y = staticBarView.bounds.height
+    addSubview(floatingBarView)
+  }
+
+  private func configureFloatingBarTitleLabel() {
+    let leftMargin: CGFloat = 20
+    let fontSize: CGFloat = 34
+    floatingBarTitleLabel = UILabel()
+    floatingBarTitleLabel.frame.size.width = floatingBarView.bounds.width - 2 * leftMargin
+    floatingBarTitleLabel.frame.size.height = fontSize
+
+    // style
+    floatingBarTitleLabel.textColor = .black
+    floatingBarTitleLabel.text = "Setting"
+    floatingBarTitleLabel.font = UIFont.boldSystemFont(ofSize: fontSize)
+    floatingBarTitleLabel.sizeToFit()
+
+    // position
+    floatingBarTitleLabel.center.y = floatingBarView.bounds.height / 2
+    floatingBarTitleLabel.frame.origin.x = leftMargin
+    floatingBarView.addSubview(floatingBarTitleLabel)
   }
 
   private override init(frame: CGRect) {
