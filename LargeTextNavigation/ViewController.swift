@@ -60,7 +60,7 @@ class ViewController: UIViewController {
 extension ViewController : UIScrollViewDelegate {
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    print(scrollView.contentOffset)
+//    print(scrollView.contentOffset)
     ya.updateBar(with: scrollView)
   }
 

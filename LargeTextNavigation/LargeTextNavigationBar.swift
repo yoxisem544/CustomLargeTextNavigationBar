@@ -51,6 +51,17 @@ final public class LargeTextNavigationBar: UIView {
     return extraNavBarHeight + statusBarHeight + staticBarHeight
   }
 
+  /// use for trigger animation for show and hide of static bar title label
+  ///
+  /// - positive for earier show
+  ///
+  /// - negative for delay show
+  private var staticBarAnimatingOffsetDelta: CGFloat {
+    return 7.0
+  }
+
+
+
   // MARK: - Init
   public convenience init() {
     self.init(frame: CGRect.zero)
@@ -95,11 +106,10 @@ final public class LargeTextNavigationBar: UIView {
     floatingBarView.frame.size.height = extraNavBarHeight
 
     // style
-    floatingBarView.backgroundColor = .green
-//    floatingBarView.backgroundColor = .white
+    floatingBarView.backgroundColor = .white
 
     floatingBarView.frame.origin.y = staticBarView.bounds.height
-    addSubview(floatingBarView)
+    insertSubview(floatingBarView, belowSubview: staticBarView)
   }
 
   private func configureFloatingBarTitleLabel() {
@@ -133,11 +143,14 @@ final public class LargeTextNavigationBar: UIView {
   ///
   /// - Parameter offset: scroll view's content offset
   public func updateBar(with scrollView: UIScrollView) {
-    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + extraNavBarHeight) { // scrolling up for more content
-      hideStaticTitleLabel()
-    } else { // scrolling down and reach top, no more content
+    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + extraNavBarHeight - staticBarAnimatingOffsetDelta) {
+      // scrolling up for more content
       showStaticTitleLabel()
+    } else {
+      // scrolling down and reach top, no more content
+      hideStaticTitleLabel()
     }
+    moveFloatingBar(with: scrollView.contentOffset.y)
   }
 
   private func hideStaticTitleLabel(animated: Bool = true) {
@@ -150,13 +163,24 @@ final public class LargeTextNavigationBar: UIView {
 
   private func animateStaticTitleLabel(alpha: CGFloat, animated: Bool) {
     UIView.animate(
-      withDuration: 0.2,
+      withDuration: 0.15,
       delay: 0,
       options: [],
       animations: {
         self.staticBarTitleLabel.alpha = alpha
       },
       completion: nil)
+  }
+
+  private func moveFloatingBar(with offsetY: CGFloat) {
+    let barY = -(offsetY + maxHeight) // set offset to 0, for ease to deal with offset
+    if barY >= 0 {
+      // user pulling down
+      floatingBarView.frame.origin.y = staticBarView.bounds.height
+    } else {
+      // user pushing up, floating bar goes up
+      floatingBarView.frame.origin.y = barY + staticBarView.bounds.height
+    }
   }
 
 }
