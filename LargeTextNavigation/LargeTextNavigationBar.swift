@@ -29,6 +29,8 @@ final public class LargeTextNavigationBar: UIView {
 
   private var searchAreaView: UIView!
   private var searchBarView: UIView!
+  private var searchBarIconImageView: UIImageView!
+  private var searchBarTextField: UITextField!
 
   private var searchBarHeight: CGFloat {
     return 40
@@ -90,6 +92,8 @@ final public class LargeTextNavigationBar: UIView {
   public convenience init() {
     self.init(frame: CGRect.zero)
 
+    frame.size.width = UIScreen.main.bounds.width
+
     configureStaticBarView()
     configureStaticBarTitleLabel()
 
@@ -102,7 +106,7 @@ final public class LargeTextNavigationBar: UIView {
 
   private func configureStaticBarView() {
     staticBarView = UIView()
-    staticBarView.frame.size.width = UIScreen.main.bounds.width
+    staticBarView.frame.size.width = bounds.width
     staticBarView.frame.size.height = staticBarHeight + statusBarHeight
 
     // style
@@ -185,6 +189,47 @@ final public class LargeTextNavigationBar: UIView {
     searchBarView.center.x = searchAreaView.bounds.width / 2
     searchBarView.frame.origin.y = searchBarTopMargin
     searchAreaView.addSubview(searchBarView)
+
+    // subviews
+    configureSearchBarIconImageView()
+    configureSearchBarTitleLabel()
+  }
+
+  private func configureSearchBarIconImageView() {
+    searchBarIconImageView = UIImageView()
+    searchBarIconImageView.frame.size = CGSize(width: 20, height: 20)
+
+    // style
+    searchBarIconImageView.contentMode = .scaleAspectFill
+    searchBarIconImageView.image = #imageLiteral(resourceName: "BlueSearchIcon")
+
+    // position
+    let leftMargin: CGFloat = 17
+    searchBarIconImageView.center.y = searchBarView.bounds.height / 2
+    searchBarIconImageView.frame.origin.x = leftMargin
+    searchBarView.addSubview(searchBarIconImageView)
+  }
+
+  private func configureSearchBarTitleLabel() {
+    searchBarTextField = UITextField()
+    let fontSize: CGFloat = 18
+    let leftMargin: CGFloat = 14
+    searchBarTextField.frame.size.height = searchBarView.bounds.height
+    searchBarTextField.frame.size.width =
+      searchBarView.bounds.width
+      - searchBarIconImageView.frame.maxX
+      - 2 * leftMargin
+
+    // style
+    searchBarTextField.textColor = .blueText
+    searchBarTextField.font = UIFont.systemFont(ofSize: fontSize)
+    searchBarTextField.placeholder = "全域搜尋"
+    searchBarTextField.isUserInteractionEnabled = true
+
+    // position
+    searchBarTextField.center.y = searchBarView.bounds.height / 2
+    searchBarTextField.frame.origin.x = searchBarIconImageView.frame.maxX + leftMargin
+    searchBarView.addSubview(searchBarTextField)
   }
 
   private override init(frame: CGRect) {
@@ -239,6 +284,8 @@ final public class LargeTextNavigationBar: UIView {
     }
     // pin search area to floating bar's bottom
     searchAreaView.frame.origin.y = floatingBarView.frame.maxY
+    // expand self.view's frame
+    frame.size.height = searchAreaView.frame.maxY
   }
 
   public func endDraggingWithoutDecelerate(_ scrollView: UIScrollView) {
