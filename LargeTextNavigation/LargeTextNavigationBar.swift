@@ -337,7 +337,14 @@ final public class LargeTextNavigationBar: UIView {
       floatingBarView.frame.origin.y = staticBarView.bounds.height
     } else {
       // user pushing up, floating bar goes up
-      floatingBarView.frame.origin.y = barY + staticBarView.bounds.height
+      let newY = barY + staticBarView.bounds.height
+      let yThatCanHideFloatingBarAndSearchBar = staticBarView.bounds.height - floatingBarAndSearchBarHeight
+      if newY < yThatCanHideFloatingBarAndSearchBar {
+        // means floating bar is moving too far
+        floatingBarView.frame.origin.y = yThatCanHideFloatingBarAndSearchBar
+      } else {
+        floatingBarView.frame.origin.y = newY
+      }
     }
     // pin search area to floating bar's bottom
     searchAreaView.frame.origin.y = floatingBarView.frame.maxY
