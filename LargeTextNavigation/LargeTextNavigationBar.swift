@@ -33,6 +33,8 @@ final public class LargeTextNavigationBar: UIView {
   private var searchBarTextField: UITextField!
 
   private var newPostButton: BitcleNavigationButton!
+  private var notificationButton: BitcleNavigationButton!
+  private var moreContentButton: BitcleNavigationButton!
 
   private var searchBarHeight: CGFloat {
     return 40
@@ -147,6 +149,8 @@ final public class LargeTextNavigationBar: UIView {
     // subviews
     configureFloatingBarTitleLabel()
     configureNewPostButton()
+    configureNotificationButton()
+    configureMoreContentButton()
   }
 
   private func configureFloatingBarTitleLabel() {
@@ -251,6 +255,26 @@ final public class LargeTextNavigationBar: UIView {
     newPostButton.frame.origin.x = floatingBarView.bounds.width - newPostButton.bounds.width - rightMargin
     newPostButton.center.y = floatingBarTitleLabel.center.y
     floatingBarView.addSubview(newPostButton)
+  }
+
+  private func configureNotificationButton() {
+    let margin: CGFloat = 13
+    notificationButton = BitcleNavigationButton(image: #imageLiteral(resourceName: "RoundBellIcon"))
+
+    // position
+    notificationButton.frame.origin.x = newPostButton.frame.origin.x - notificationButton.bounds.width - margin
+    notificationButton.center.y = newPostButton.center.y
+    floatingBarView.addSubview(notificationButton)
+  }
+
+  private func configureMoreContentButton() {
+    let margin: CGFloat = 13
+    moreContentButton = BitcleNavigationButton(image: #imageLiteral(resourceName: "RoundArrowIcon"))
+
+    // position
+    moreContentButton.frame.origin.x = notificationButton.frame.origin.x - moreContentButton.bounds.width - margin
+    moreContentButton.center.y = notificationButton.center.y
+    floatingBarView.addSubview(moreContentButton)
   }
 
   private override init(frame: CGRect) {
