@@ -32,6 +32,8 @@ final public class LargeTextNavigationBar: UIView {
   private var searchBarIconImageView: UIImageView!
   private var searchBarTextField: UITextField!
 
+  private var newPostButton: BitcleNavigationButton!
+
   private var searchBarHeight: CGFloat {
     return 40
   }
@@ -95,13 +97,10 @@ final public class LargeTextNavigationBar: UIView {
     frame.size.width = UIScreen.main.bounds.width
 
     configureStaticBarView()
-    configureStaticBarTitleLabel()
 
     configureFloatingBarView()
-    configureFloatingBarTitleLabel()
     
     configureSearchAreaView()
-    configureSearchBarView()
   }
 
   private func configureStaticBarView() {
@@ -113,6 +112,9 @@ final public class LargeTextNavigationBar: UIView {
     staticBarView.backgroundColor = .white
 
     addSubview(staticBarView)
+
+    // subview
+    configureStaticBarTitleLabel()
   }
 
   private func configureStaticBarTitleLabel() {
@@ -141,6 +143,10 @@ final public class LargeTextNavigationBar: UIView {
 
     floatingBarView.frame.origin.y = staticBarView.bounds.height
     insertSubview(floatingBarView, belowSubview: staticBarView)
+
+    // subviews
+    configureFloatingBarTitleLabel()
+    configureNewPostButton()
   }
 
   private func configureFloatingBarTitleLabel() {
@@ -173,6 +179,9 @@ final public class LargeTextNavigationBar: UIView {
     // position
     searchAreaView.frame.origin.y = heightWithoutSearchArea
     insertSubview(searchAreaView, belowSubview: staticBarView)
+
+    // subviews
+    configureSearchBarView()
   }
 
   private func configureSearchBarView() {
@@ -232,6 +241,16 @@ final public class LargeTextNavigationBar: UIView {
     searchBarTextField.center.y = searchBarView.bounds.height / 2
     searchBarTextField.frame.origin.x = searchBarIconImageView.frame.maxX + leftMargin
     searchBarView.addSubview(searchBarTextField)
+  }
+
+  private func configureNewPostButton() {
+    let rightMargin: CGFloat = 22
+    newPostButton = BitcleNavigationButton(image: #imageLiteral(resourceName: "RoundNewpostIcon"))
+
+    // position
+    newPostButton.frame.origin.x = floatingBarView.bounds.width - newPostButton.bounds.width - rightMargin
+    newPostButton.center.y = floatingBarTitleLabel.center.y
+    floatingBarView.addSubview(newPostButton)
   }
 
   private override init(frame: CGRect) {
