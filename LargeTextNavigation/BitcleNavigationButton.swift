@@ -16,6 +16,17 @@ final public class BitcleNavigationButton: UIButton {
 
   public private(set) var isRedDotVisible: Bool = false
 
+  public var action: (() -> ())? {
+    didSet {
+      removeTarget(nil, action: nil, for: .allEvents)
+      addTarget(self, action: #selector(BitcleNavigationButton.performAction), for: .touchUpInside)
+    }
+  }
+
+  @objc private func performAction() {
+    action?()
+  }
+
   public convenience init(image: UIImage) {
     self.init(type: .system)
 

@@ -256,7 +256,9 @@ final public class LargeTextNavigationBar: UIView {
     newPostButton.center.y = floatingBarTitleLabel.center.y
     floatingBarView.addSubview(newPostButton)
 
-    newPostButton.addTarget(self, action: #selector(LargeTextNavigationBar.toggleRedDot(button:)), for: .touchUpInside)
+    newPostButton.action = { [unowned self] in
+      self.newPostButton.showRedDot(!self.newPostButton.isRedDotVisible)
+    }
   }
 
   private func configureNotificationButton() {
@@ -268,7 +270,9 @@ final public class LargeTextNavigationBar: UIView {
     notificationButton.center.y = newPostButton.center.y
     floatingBarView.addSubview(notificationButton)
 
-    notificationButton.addTarget(self, action: #selector(LargeTextNavigationBar.toggleRedDot(button:)), for: .touchUpInside)
+    notificationButton.action = { [unowned self] in
+      self.notificationButton.showRedDot(!self.notificationButton.isRedDotVisible)
+    }
   }
 
   private func configureMoreContentButton() {
@@ -280,7 +284,9 @@ final public class LargeTextNavigationBar: UIView {
     moreContentButton.center.y = notificationButton.center.y
     floatingBarView.addSubview(moreContentButton)
 
-    moreContentButton.addTarget(self, action: #selector(LargeTextNavigationBar.toggleRedDot(button:)), for: .touchUpInside)
+    moreContentButton.action = { [unowned self] in
+      self.moreContentButton.showRedDot(!self.moreContentButton.isRedDotVisible)
+    }
   }
 
   private override init(frame: CGRect) {
