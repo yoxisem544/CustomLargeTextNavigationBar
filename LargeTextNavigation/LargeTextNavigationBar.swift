@@ -27,11 +27,26 @@ final public class LargeTextNavigationBar: UIView {
   private var floatingBarView: UIView!
   private var floatingBarTitleLabel: UILabel!
 
-  public var currentHeight: CGFloat {
-    return staticBarView.bounds.height
+  private var searchAreaView: UIView!
+  private var searchBarView: UIView!
+
+  private var searchBarHeight: CGFloat {
+    return 40
   }
 
-  /// Extra nav bar height is used for large text extra height
+  private var searchBarTopMargin: CGFloat {
+    return 4
+  }
+
+  private var searchBarBottomMargin: CGFloat {
+    return 10
+  }
+
+  private var searchAreaHeight: CGFloat {
+    return searchBarHeight + searchBarTopMargin + searchBarBottomMargin
+  }
+
+  /// floatingTitleBarHeight is used for large text extra height
   ///
   /// iPhone X:
   ///  - standard height 88pt
@@ -42,13 +57,22 @@ final public class LargeTextNavigationBar: UIView {
   ///  - large text height 116pt
   ///
   /// (large - standard) is **52pt**
-  private var extraNavBarHeight: CGFloat {
+  private var floatingTitleBarHeight: CGFloat {
     return 52.0
+  }
+
+  /// This Nav Bar's height without search area
+  public var heightWithoutSearchArea: CGFloat {
+    return floatingTitleBarHeight + statusBarHeight + staticBarHeight
+  }
+
+  private var floatingBarAndSearchBarHeight: CGFloat {
+    return floatingTitleBarHeight + searchAreaHeight
   }
 
   /// This Nav Bar's max height
   public var maxHeight: CGFloat {
-    return extraNavBarHeight + statusBarHeight + staticBarHeight
+    return heightWithoutSearchArea + searchAreaHeight
   }
 
   /// use for trigger animation for show and hide of static bar title label
@@ -71,6 +95,9 @@ final public class LargeTextNavigationBar: UIView {
 
     configureFloatingBarView()
     configureFloatingBarTitleLabel()
+    
+    configureSearchAreaView()
+    configureSearchBarView()
   }
 
   private func configureStaticBarView() {
@@ -94,7 +121,7 @@ final public class LargeTextNavigationBar: UIView {
     staticBarTitleLabel.textColor = .black
     staticBarTitleLabel.font = UIFont.boldSystemFont(ofSize: fontSize)
     staticBarTitleLabel.textAlignment = .center
-    staticBarTitleLabel.text = "Yahoo"
+    staticBarTitleLabel.text = "社群動態"
 
     staticBarTitleLabel.center.y = statusBarHeight + staticBarHeight / 2
     staticBarView.addSubview(staticBarTitleLabel)
@@ -103,7 +130,7 @@ final public class LargeTextNavigationBar: UIView {
   private func configureFloatingBarView() {
     floatingBarView = UIView()
     floatingBarView.frame.size.width = staticBarView.bounds.width
-    floatingBarView.frame.size.height = extraNavBarHeight
+    floatingBarView.frame.size.height = floatingTitleBarHeight
 
     // style
     floatingBarView.backgroundColor = .white
@@ -121,7 +148,7 @@ final public class LargeTextNavigationBar: UIView {
 
     // style
     floatingBarTitleLabel.textColor = .black
-    floatingBarTitleLabel.text = "Setting"
+    floatingBarTitleLabel.text = "社群動態"
     floatingBarTitleLabel.font = UIFont(name: ".SFUIDisplay-Bold", size: fontSize)
     floatingBarTitleLabel.sizeToFit()
 
@@ -129,6 +156,35 @@ final public class LargeTextNavigationBar: UIView {
     floatingBarTitleLabel.center.y = floatingBarView.bounds.height / 2
     floatingBarTitleLabel.frame.origin.x = leftMargin
     floatingBarView.addSubview(floatingBarTitleLabel)
+  }
+
+  private func configureSearchAreaView() {
+    searchAreaView = UIView()
+    searchAreaView.frame.size.width = staticBarView.bounds.width
+    searchAreaView.frame.size.height = searchAreaHeight
+
+    // style
+    searchAreaView.backgroundColor = .white
+
+    // position
+    searchAreaView.frame.origin.y = heightWithoutSearchArea
+    insertSubview(searchAreaView, belowSubview: staticBarView)
+  }
+
+  private func configureSearchBarView() {
+    let leftMargin: CGFloat = 20
+    searchBarView = UIView()
+    searchBarView.frame.size.width = searchAreaView.bounds.width - 2 * leftMargin
+    searchBarView.frame.size.height = searchBarHeight
+
+    // style
+    searchBarView.backgroundColor = .blueBackground
+    searchBarView.layer.cornerRadius = 14
+
+    // position
+    searchBarView.center.x = searchAreaView.bounds.width / 2
+    searchBarView.frame.origin.y = searchBarTopMargin
+    searchAreaView.addSubview(searchBarView)
   }
 
   private override init(frame: CGRect) {
@@ -143,7 +199,7 @@ final public class LargeTextNavigationBar: UIView {
   ///
   /// - Parameter offset: scroll view's content offset
   public func updateBar(with scrollView: UIScrollView) {
-    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + extraNavBarHeight - staticBarAnimatingOffsetDelta) {
+    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + floatingTitleBarHeight - staticBarAnimatingOffsetDelta) {
       // scrolling up for more content
       showStaticTitleLabel()
     } else {
@@ -181,14 +237,16 @@ final public class LargeTextNavigationBar: UIView {
       // user pushing up, floating bar goes up
       floatingBarView.frame.origin.y = barY + staticBarView.bounds.height
     }
+    // pin search area to floating bar's bottom
+    searchAreaView.frame.origin.y = floatingBarView.frame.maxY
   }
 
   public func endDraggingWithoutDecelerate(_ scrollView: UIScrollView) {
     let barY = -(scrollView.contentOffset.y + maxHeight)
-    if barY < -(extraNavBarHeight / 2) {
+    if barY < -(floatingBarAndSearchBarHeight / 2) {
       // push up, need to hide floating view
       UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-        scrollView.contentOffset.y = (self.extraNavBarHeight - scrollView.contentInset.top)
+        scrollView.contentOffset.y = (self.floatingBarAndSearchBarHeight - scrollView.contentInset.top)
       }, completion: nil)
     } else {
       UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
