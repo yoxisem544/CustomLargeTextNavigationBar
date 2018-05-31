@@ -222,8 +222,10 @@ final public class LargeTextNavigationBar: UIView {
 
     // style
     searchBarTextField.textColor = .blueText
+    searchBarTextField.tintColor = .blueText
+    searchBarTextField.attributedPlaceholder =
+      NSAttributedString(string: "全域搜尋", attributes: [.foregroundColor: UIColor.blueText])
     searchBarTextField.font = UIFont.systemFont(ofSize: fontSize)
-    searchBarTextField.placeholder = "全域搜尋"
     searchBarTextField.isUserInteractionEnabled = true
 
     // position
