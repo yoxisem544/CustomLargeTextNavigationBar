@@ -97,6 +97,7 @@ final public class LargeTextNavigationBar: UIView {
     self.init(frame: CGRect.zero)
 
     frame.size.width = UIScreen.main.bounds.width
+    backgroundColor = .white
 
     configureStaticBarView()
 
@@ -334,7 +335,8 @@ final public class LargeTextNavigationBar: UIView {
     let barY = -(offsetY + maxHeight) // set offset to 0, for ease to deal with offset
     if barY >= 0 {
       // user pulling down
-      floatingBarView.frame.origin.y = staticBarView.bounds.height
+      let growingheight = 25 * atan(barY/60)
+      floatingBarView.frame.origin.y = staticBarView.bounds.height + growingheight
     } else {
       // user pushing up, floating bar goes up
       let newY = barY + staticBarView.bounds.height
