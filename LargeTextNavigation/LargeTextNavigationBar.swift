@@ -10,26 +10,7 @@ import UIKit
 
 final public class LargeTextNavigationBar: UIView {
 
-  /// determine status bar's height wether its iPhone X or other device
-  ///
-  /// iPhone X's status bar height is 44.
-  /// Other devices' are 20
-  private var statusBarHeight: CGFloat {
-    return UIDevice.type == .iPhoneX ? 44 : 20
-  }
-
-  /// static bar's height
-  let staticBarHeight: CGFloat = 44.0
-
-  private var staticBarView: UIView!
-  private var staticBarTitleLabel: UILabel!
-
-  private var floatingBarView: UIView!
-  private var floatingBarTitleLabel: UILabel!
-
-  private var newPostButton: BitcleNavigationButton!
-  private var notificationButton: BitcleNavigationButton!
-  private var moreContentButton: BitcleNavigationButton!
+  // MARK: - Properties
 
   /// floatingTitleBarHeight is used for large text extra height
   ///
@@ -64,6 +45,28 @@ final public class LargeTextNavigationBar: UIView {
     return 7.0
   }
 
+  /// determine status bar's height wether its iPhone X or other device
+  ///
+  /// iPhone X's status bar height is 44.
+  /// Other devices' are 20
+  private var statusBarHeight: CGFloat {
+    return UIDevice.type == .iPhoneX ? 44 : 20
+  }
+
+  /// static bar's height
+  let staticBarHeight: CGFloat = 44.0
+
+  // MARK: - Subviews
+  private var staticBarView: UIView!
+  private var staticBarTitleLabel: UILabel!
+
+  private var floatingBarView: UIView!
+  private var floatingBarTitleLabel: UILabel!
+
+  private var newPostButton: BitcleNavigationButton!
+  private var notificationButton: BitcleNavigationButton!
+  private var moreContentButton: BitcleNavigationButton!
+
 
 
   // MARK: - Init
@@ -79,6 +82,15 @@ final public class LargeTextNavigationBar: UIView {
 
   }
 
+  private override init(frame: CGRect) {
+    super.init(frame: frame)
+  }
+
+  required public init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Configuration
   private func configureStaticBarView() {
     staticBarView = UIView()
     staticBarView.frame.size.width = bounds.width
@@ -104,7 +116,7 @@ final public class LargeTextNavigationBar: UIView {
     staticBarTitleLabel.font = UIFont.boldSystemFont(ofSize: fontSize)
     staticBarTitleLabel.textAlignment = .center
     staticBarTitleLabel.text = "社群動態"
-
+    
     staticBarTitleLabel.center.y = statusBarHeight + staticBarHeight / 2
     staticBarView.addSubview(staticBarTitleLabel)
   }
@@ -188,27 +200,7 @@ final public class LargeTextNavigationBar: UIView {
     }
   }
 
-  private override init(frame: CGRect) {
-    super.init(frame: frame)
-  }
-
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  /// adjust view's arrangement with content offset
-  ///
-  /// - Parameter offset: scroll view's content offset
-  public func updateBar(with scrollView: UIScrollView) {
-    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + floatingTitleBarHeight - staticBarAnimatingOffsetDelta) {
-      // scrolling up for more content
-      showStaticTitleLabel()
-    } else {
-      // scrolling down and reach top, no more content
-      hideStaticTitleLabel()
-    }
-    moveFloatingBar(with: scrollView.contentOffset.y)
-  }
+  // MARK: - Update Bar Private Methods
 
   private func hideStaticTitleLabel(animated: Bool = true) {
     animateStaticTitleLabel(alpha: 0.0, animated: animated)
@@ -248,6 +240,22 @@ final public class LargeTextNavigationBar: UIView {
     }
     // expand self.view's frame
     frame.size.height = floatingBarView.frame.maxY
+  }
+
+  // MARK: - Public Method to update Nav Bar
+
+  /// adjust view's arrangement with content offset
+  ///
+  /// - Parameter offset: scroll view's content offset
+  public func updateBar(with scrollView: UIScrollView) {
+    if scrollView.contentOffset.y > (0 - scrollView.contentInset.top + floatingTitleBarHeight - staticBarAnimatingOffsetDelta) {
+      // scrolling up for more content
+      showStaticTitleLabel()
+    } else {
+      // scrolling down and reach top, no more content
+      hideStaticTitleLabel()
+    }
+    moveFloatingBar(with: scrollView.contentOffset.y)
   }
 
   public func endDraggingWithoutDecelerate(_ scrollView: UIScrollView) {
