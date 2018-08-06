@@ -27,30 +27,9 @@ final public class LargeTextNavigationBar: UIView {
   private var floatingBarView: UIView!
   private var floatingBarTitleLabel: UILabel!
 
-  private var searchAreaView: UIView!
-  private var searchBarView: UIView!
-  private var searchBarIconImageView: UIImageView!
-  private var searchBarTextField: UITextField!
-
   private var newPostButton: BitcleNavigationButton!
   private var notificationButton: BitcleNavigationButton!
   private var moreContentButton: BitcleNavigationButton!
-
-  private var searchBarHeight: CGFloat {
-    return 40
-  }
-
-  private var searchBarTopMargin: CGFloat {
-    return 4
-  }
-
-  private var searchBarBottomMargin: CGFloat {
-    return 10
-  }
-
-  private var searchAreaHeight: CGFloat {
-    return searchBarHeight + searchBarTopMargin + searchBarBottomMargin
-  }
 
   /// floatingTitleBarHeight is used for large text extra height
   ///
@@ -67,18 +46,13 @@ final public class LargeTextNavigationBar: UIView {
     return 52.0
   }
 
-  /// This Nav Bar's height without search area
-  public var heightWithoutSearchArea: CGFloat {
-    return floatingTitleBarHeight + statusBarHeight + staticBarHeight
-  }
-
-  private var floatingBarAndSearchBarHeight: CGFloat {
-    return floatingTitleBarHeight + searchAreaHeight
+  private var floatingBarHeight: CGFloat {
+    return floatingTitleBarHeight
   }
 
   /// This Nav Bar's max height
   public var maxHeight: CGFloat {
-    return heightWithoutSearchArea + searchAreaHeight
+    return floatingTitleBarHeight + statusBarHeight + staticBarHeight
   }
 
   /// use for trigger animation for show and hide of static bar title label
@@ -102,8 +76,7 @@ final public class LargeTextNavigationBar: UIView {
     configureStaticBarView()
 
     configureFloatingBarView()
-    
-    configureSearchAreaView()
+
   }
 
   private func configureStaticBarView() {
@@ -171,81 +144,6 @@ final public class LargeTextNavigationBar: UIView {
     floatingBarTitleLabel.center.y = floatingBarView.bounds.height / 2
     floatingBarTitleLabel.frame.origin.x = leftMargin
     floatingBarView.addSubview(floatingBarTitleLabel)
-  }
-
-  private func configureSearchAreaView() {
-    searchAreaView = UIView()
-    searchAreaView.frame.size.width = staticBarView.bounds.width
-    searchAreaView.frame.size.height = searchAreaHeight
-
-    // style
-    searchAreaView.backgroundColor = .white
-
-    // position
-    searchAreaView.frame.origin.y = heightWithoutSearchArea
-    insertSubview(searchAreaView, belowSubview: staticBarView)
-
-    // subviews
-    configureSearchBarView()
-  }
-
-  private func configureSearchBarView() {
-    let leftMargin: CGFloat = 20
-    searchBarView = UIView()
-    searchBarView.frame.size.width = searchAreaView.bounds.width - 2 * leftMargin
-    searchBarView.frame.size.height = searchBarHeight
-
-    // style
-    searchBarView.backgroundColor = .blueBackground
-    searchBarView.layer.cornerRadius = 14
-
-    // position
-    searchBarView.center.x = searchAreaView.bounds.width / 2
-    searchBarView.frame.origin.y = searchBarTopMargin
-    searchAreaView.addSubview(searchBarView)
-
-    // subviews
-    configureSearchBarIconImageView()
-    configureSearchBarTitleLabel()
-  }
-
-  private func configureSearchBarIconImageView() {
-    searchBarIconImageView = UIImageView()
-    searchBarIconImageView.frame.size = CGSize(width: 20, height: 20)
-
-    // style
-    searchBarIconImageView.contentMode = .scaleAspectFill
-    searchBarIconImageView.image = #imageLiteral(resourceName: "BlueSearchIcon")
-
-    // position
-    let leftMargin: CGFloat = 17
-    searchBarIconImageView.center.y = searchBarView.bounds.height / 2
-    searchBarIconImageView.frame.origin.x = leftMargin
-    searchBarView.addSubview(searchBarIconImageView)
-  }
-
-  private func configureSearchBarTitleLabel() {
-    searchBarTextField = UITextField()
-    let fontSize: CGFloat = 18
-    let leftMargin: CGFloat = 14
-    searchBarTextField.frame.size.height = searchBarView.bounds.height
-    searchBarTextField.frame.size.width =
-      searchBarView.bounds.width
-      - searchBarIconImageView.frame.maxX
-      - 2 * leftMargin
-
-    // style
-    searchBarTextField.textColor = .blueText
-    searchBarTextField.tintColor = .blueText
-    searchBarTextField.attributedPlaceholder =
-      NSAttributedString(string: "全域搜尋", attributes: [.foregroundColor: UIColor.blueText])
-    searchBarTextField.font = UIFont.systemFont(ofSize: fontSize)
-    searchBarTextField.isUserInteractionEnabled = true
-
-    // position
-    searchBarTextField.center.y = searchBarView.bounds.height / 2
-    searchBarTextField.frame.origin.x = searchBarIconImageView.frame.maxX + leftMargin
-    searchBarView.addSubview(searchBarTextField)
   }
 
   private func configureNewPostButton() {
@@ -340,26 +238,24 @@ final public class LargeTextNavigationBar: UIView {
     } else {
       // user pushing up, floating bar goes up
       let newY = barY + staticBarView.bounds.height
-      let yThatCanHideFloatingBarAndSearchBar = staticBarView.bounds.height - floatingBarAndSearchBarHeight
-      if newY < yThatCanHideFloatingBarAndSearchBar {
+      let yThatCanHideFloatingBar = staticBarView.bounds.height - floatingBarHeight
+      if newY < yThatCanHideFloatingBar {
         // means floating bar is moving too far
-        floatingBarView.frame.origin.y = yThatCanHideFloatingBarAndSearchBar
+        floatingBarView.frame.origin.y = yThatCanHideFloatingBar
       } else {
         floatingBarView.frame.origin.y = newY
       }
     }
-    // pin search area to floating bar's bottom
-    searchAreaView.frame.origin.y = floatingBarView.frame.maxY
     // expand self.view's frame
-    frame.size.height = searchAreaView.frame.maxY
+    frame.size.height = floatingBarView.frame.maxY
   }
 
   public func endDraggingWithoutDecelerate(_ scrollView: UIScrollView) {
     let barY = -(scrollView.contentOffset.y + maxHeight)
-    if barY < -(floatingBarAndSearchBarHeight / 2) {
+    if barY < -(floatingBarHeight / 2) {
       // push up, need to hide floating view
       UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-        scrollView.contentOffset.y = (self.floatingBarAndSearchBarHeight - scrollView.contentInset.top)
+        scrollView.contentOffset.y = (self.floatingBarHeight - scrollView.contentInset.top)
       }, completion: nil)
     } else {
       UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
